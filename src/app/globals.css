@@ -1,34 +1,40 @@
 @import "tailwindcss";
 
 /*
- * Design tokens. Brand-specific values (font stacks, palette, motion curves)
- * will be overwritten when the brand spec is provided. Keep tokens in this
- * file as the single source of truth — components reference them via Tailwind
- * utilities or `var(--token-name)`.
+ * Brand tokens. Single source of truth. Components consume tokens via Tailwind
+ * utilities (`bg-primary`, `text-charcoal`) or `var(--token-name)` for raw CSS.
  */
 
 @theme {
-  /* Surface */
-  --color-background: oklch(99% 0 0);
-  --color-foreground: oklch(15% 0.01 250);
-  --color-muted: oklch(96% 0.005 250);
-  --color-muted-foreground: oklch(45% 0.01 250);
-  --color-border: oklch(92% 0.005 250);
-  --color-ring: oklch(70% 0.16 240);
+  /* Brand */
+  --color-orange: #e85e00;
+  --color-orange-deep: #c24e00;
+  --color-orange-tint: #fff0e6;
 
-  /* Brand (placeholder until brand spec lands) */
-  --color-primary: oklch(45% 0.16 165);
-  --color-primary-foreground: oklch(99% 0 0);
-  --color-accent: oklch(75% 0.16 90);
-  --color-accent-foreground: oklch(15% 0.01 250);
+  /* Text */
+  --color-charcoal: #1c2b2a;
+  --color-forest: #2e4a47;
 
-  /* State */
-  --color-destructive: oklch(58% 0.22 25);
-  --color-destructive-foreground: oklch(99% 0 0);
+  /* Surfaces */
+  --color-warm-white: #f5f2ed;
+  --color-sand: #e8e2d9;
 
-  /* Typography (placeholder) */
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-serif: ui-serif, Georgia, "Times New Roman", serif;
+  /* Semantic surface aliases */
+  --color-background: #f5f2ed;
+  --color-foreground: #1c2b2a;
+  --color-muted: #e8e2d9;
+  --color-muted-foreground: #2e4a47;
+  --color-border: #e8e2d9;
+  --color-ring: #e85e00;
+  --color-primary: #e85e00;
+  --color-primary-foreground: #ffffff;
+  --color-accent: #fff0e6;
+  --color-accent-foreground: #1c2b2a;
+  --color-destructive: #c24e00;
+  --color-destructive-foreground: #ffffff;
+
+  /* Typography */
+  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
   /* Fluid type scale */
@@ -52,16 +58,6 @@
   --radius-pill: 9999px;
 }
 
-@media (prefers-color-scheme: dark) {
-  @theme {
-    --color-background: oklch(12% 0.01 250);
-    --color-foreground: oklch(96% 0.005 250);
-    --color-muted: oklch(20% 0.01 250);
-    --color-muted-foreground: oklch(70% 0.01 250);
-    --color-border: oklch(25% 0.01 250);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -73,14 +69,11 @@
   }
 }
 
-html {
-  color-scheme: light dark;
-}
-
 body {
   background: var(--color-background);
   color: var(--color-foreground);
   font-family: var(--font-sans);
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }

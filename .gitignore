@@ -44,6 +44,12 @@ next-env.d.ts
 # screenshots
 .screenshots/
 
+# turbopack cache
+.turbo/
+
+# sanity cli
+sanity.cli.log
+
 # editor
 .vscode/
 .idea/

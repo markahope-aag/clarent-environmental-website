@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "shoot": "bun --env-file=.env.local scripts/shoot.ts"
+    "lint": "eslint .",
+    "shoot": "bun run scripts/shoot.ts"
   },
   "dependencies": {
     "@hono/node-server": "^2.0.1",

@@ -12,13 +12,13 @@ const ServerEnvSchema = z.object({
   NEXT_PUBLIC_SANITY_PROJECT_ID: z.string().optional(),
   NEXT_PUBLIC_SANITY_DATASET: z.string().default("production"),
   NEXT_PUBLIC_SANITY_API_VERSION: z.string().default("2025-01-01"),
-  SANITY_API_READ_TOKEN: z.string().optional(),
-  SANITY_REVALIDATE_SECRET: z.string().optional(),
+  SANITY_API_TOKEN: z.string().optional(),
+  SANITY_WEBHOOK_SECRET: z.string().optional(),
 
   HUBSPOT_ACCESS_TOKEN: z.string().optional(),
 
   RESEND_API_KEY: z.string().optional(),
-  RESEND_FROM: z.string().optional(),
+  RESEND_FROM_ADDRESS: z.string().optional(),
 });
 
 export type Env = z.infer<typeof ServerEnvSchema>;

@@ -1,42 +1,40 @@
-# MEMORY
+# Clarent Web — Architectural Memory
 
-Durable architectural decisions for this project. Treat as authoritative — if a
-design choice contradicts what is here, update this file as part of the change.
+## Project
+Marketing website for Clarent Environmental (clarentenvironmental.com).
+Hazardous waste broker/platform for Small Quantity Generators (SQGs).
 
-## Data ownership
+## Data Architecture
+- **Sanity**: all editorial content (blog, pages, services, team, testimonials, FAQs)
+- **Supabase**: transactional data and mirror of HubSpot contacts
+- **HubSpot**: canonical store for leads and contacts; forms write-through here
+- Rule: never duplicate editorial content in Supabase; never store contacts as canonical in Sanity
 
-Three systems, one job each:
+## Routing
+- Next.js 16 App Router, trailingSlash: true
+- proxy.ts replaces middleware.ts (Next 16 convention)
+- Hono 4 API mounted at src/app/api/[[...route]]/route.ts
+- Sanity Studio mounted in-app at /studio/ — do NOT deploy to sanity.studio.io
 
-- **Sanity** — canonical store for **editorial content** (pages, articles, case studies, navigation, etc.). Studio is mounted in-app at `/studio/`; we do not deploy a standalone studio to `sanity.studio.io`.
-- **Supabase** — canonical store for **transactional data** (sessions, app records) and the **mirror** of contacts pulled from HubSpot for fast querying / joins.
-- **HubSpot** — canonical store for **contacts and subscribers**. Public forms write through to HubSpot; Supabase mirrors for read paths that need joins.
-
-Write-through rule: whenever a public form captures contact data, the request hits HubSpot first; only after a successful HubSpot upsert do we write the mirror row to Supabase.
-
-## Routing and runtime
-
-- **Next.js 16, App Router only.** No `pages/` directory.
-- `trailingSlash: true` is set in `next.config.ts`. Always link with trailing slashes.
-- Middleware lives in `src/proxy.ts` (Next 16 renamed `middleware.ts` → `proxy.ts`). The proxy refreshes Supabase sessions on every non-static request.
-- API surface is **Hono**, mounted as a single catch-all route at `src/app/api/[[...route]]/route.ts`. Add API endpoints to that Hono app — do not create sibling `route.ts` files unless there is a strong reason.
-
-## Styling
-
-- **Tailwind CSS v4** via `@tailwindcss/postcss`. There is no `tailwind.config.js` — design tokens live as CSS custom properties in `src/app/globals.css` under `@theme`.
-- shadcn/ui is preconfigured (`components.json`). Add components on demand with `bunx shadcn@latest add <component>`. Generated components land in `src/components/ui/`.
-
-## Testing
-
-No test runner. Quality gates are:
-
-1. `bun run typecheck` (`tsc --noEmit`)
-2. `bun run lint` (ESLint flat config)
-3. `bun run shoot <route>` (deterministic screenshot pipeline) for visual review
-
-Do not introduce Jest, Vitest, Playwright Test, or any other unit/integration test runner without first updating this section.
+## Stack
+Next.js 16 · React 19 · TypeScript strict · Bun · Tailwind v4
+Hono 4 · Zod 4 · Supabase SSR · Sanity · HubSpot · Resend
+shadcn/ui · Radix UI · framer-motion · lucide-react
 
 ## Deployment
+- Vercel, auto-deploy on push to master
+- Default branch: master. Direct-to-master workflow.
+- No feature branches unless hotfix.
 
-- Production: **Vercel**, auto-deploy on push to `master`.
-- Default branch: `master`. Direct-to-master workflow — no feature branches.
-- Vercel CLI is installed globally on each developer's machine; it is **not** in `package.json`.
+## Brand
+- Orange: #E85E00 (primary), #C24E00 (deep/hover)
+- Text: #1C2B2A (charcoal primary), #2E4A47 (forest secondary)
+- Backgrounds: #F5F2ED (warm white), #E8E2D9 (sand), #FFF0E6 (orange tint)
+- Font: Poppins (Light 300, Regular 400, Medium 500, Bold 700)
+- Tagline: Compliance made simple.
+
+## Deliberate omissions
+- No test runner (Vitest, Jest, etc.)
+- No state management library
+- No analytics SDK in the bundle by default
+- No standalone Sanity Studio deploy

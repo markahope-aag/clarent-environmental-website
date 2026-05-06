@@ -10,6 +10,6 @@ export const sanityClient = createClient({
 export const sanityReadClient = createClient({
   ...sanityConfig,
   perspective: "raw",
-  token: env.SANITY_API_READ_TOKEN,
+  ...(env.SANITY_API_TOKEN !== undefined ? { token: env.SANITY_API_TOKEN } : {}),
   useCdn: false,
 });

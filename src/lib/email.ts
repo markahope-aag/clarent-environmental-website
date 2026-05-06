@@ -30,12 +30,12 @@ export async function sendTransactional(args: SendTransactionalArgs): Promise<Se
 
   const resend = getResend();
   const result = await resend.emails.send({
-    from: args.from ?? requireEnv("RESEND_FROM"),
+    from: args.from ?? requireEnv("RESEND_FROM_ADDRESS"),
     to: args.to,
     subject: args.subject,
     html: args.html ?? "",
-    text: args.text,
-    replyTo: args.replyTo,
+    ...(args.text !== undefined ? { text: args.text } : {}),
+    ...(args.replyTo !== undefined ? { replyTo: args.replyTo } : {}),
   });
 
   if (result.error) {

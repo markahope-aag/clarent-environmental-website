@@ -1,25 +1,26 @@
-import type { Metadata, Viewport } from "next";
+import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { Poppins } from "next/font/google";
 import "./globals.css";
+
+const poppins = Poppins({
+  variable: "--font-poppins",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "700"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
     default: "Clarent Environmental",
     template: "%s — Clarent Environmental",
   },
-  description: "Clarent Environmental — environmental engineering and consulting.",
-};
-
-export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0b0d10" },
-  ],
+  description: "Compliance made simple. Hazardous waste broker for Small Quantity Generators.",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className="h-full">
+    <html lang="en" className={`${poppins.variable} h-full`}>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
