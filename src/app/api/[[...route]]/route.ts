@@ -1,17 +1,39 @@
 import { Hono } from "hono";
+import { handle } from "hono/vercel";
 
 const app = new Hono().basePath("/api");
 
-app.get("/health", (c) =>
-  c.json({ ok: true, service: "clarent-environmental-website", ts: Date.now() })
-);
+// Health check
+app.get("/health", (c) => c.json({ status: "ok", ts: Date.now() }));
 
-const handler = (request: Request) => app.fetch(request);
+// Lead capture — writes to HubSpot and mirrors to Supabase
+app.post("/leads", async (c) => {
+  const { z } = await import("zod");
+  const schema = z.object({
+    email:     z.string().email(),
+    firstName: z.string().optional(),
+    lastName:  z.string().optional(),
+    company:   z.string().optional(),
+    phone:     z.string().optional(),
+    state:     z.string().optional(),
+    wasteType: z.string().optional(),
+  });
 
-export const GET = handler;
-export const POST = handler;
-export const PUT = handler;
-export const PATCH = handler;
-export const DELETE = handler;
-export const OPTIONS = handler;
-export const HEAD = handler;
+  const parsed = schema.safeParse(await c.req.json());
+  if (!parsed.success) return c.json({ error: "Invalid input" }, 400);
+
+  const { upsertContact } = await import("@/lib/hubspot");
+  const { sendEmail, leadNotificationHtml } = await import("@/lib/email");
+
+  await upsertContact({ ...parsed.data, source: "website" });
+  await sendEmail({
+    to: "mark.hope@clarentenvironmental.com",
+    subject: `New lead: ${parsed.data.email}`,
+    html: leadNotificationHtml(parsed.data),
+  });
+
+  return c.json({ ok: true });
+});
+
+export const GET  = handle(app);
+export const POST = handle(app);

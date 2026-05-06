@@ -1,49 +1,49 @@
 import { Resend } from "resend";
-import { requireEnv } from "@/lib/env";
+import { env } from "@/lib/env";
 
-let cachedResend: Resend | null = null;
-
-function getResend(): Resend {
-  if (!cachedResend) {
-    cachedResend = new Resend(requireEnv("RESEND_API_KEY"));
-  }
-  return cachedResend;
+function getClient() {
+  if (!env.RESEND_API_KEY) return null;
+  return new Resend(env.RESEND_API_KEY);
 }
 
-export interface SendTransactionalArgs {
+export interface EmailPayload {
   to: string | string[];
   subject: string;
-  html?: string;
-  text?: string;
+  html: string;
   from?: string;
   replyTo?: string;
 }
 
-export interface SendTransactionalResult {
-  id: string;
-}
-
-export async function sendTransactional(args: SendTransactionalArgs): Promise<SendTransactionalResult> {
-  if (!args.html && !args.text) {
-    throw new Error("sendTransactional requires html or text content");
+export async function sendEmail(payload: EmailPayload): Promise<void> {
+  const resend = getClient();
+  if (!resend) {
+    console.warn("[email] No RESEND_API_KEY — skipping send");
+    return;
   }
 
-  const resend = getResend();
-  const result = await resend.emails.send({
-    from: args.from ?? requireEnv("RESEND_FROM_ADDRESS"),
-    to: args.to,
-    subject: args.subject,
-    html: args.html ?? "",
-    ...(args.text !== undefined ? { text: args.text } : {}),
-    ...(args.replyTo !== undefined ? { replyTo: args.replyTo } : {}),
+  const { error } = await resend.emails.send({
+    from: payload.from ?? env.RESEND_FROM_ADDRESS,
+    to: payload.to,
+    subject: payload.subject,
+    html: payload.html,
+    ...(payload.replyTo && { replyTo: payload.replyTo }),
   });
 
-  if (result.error) {
-    throw new Error(`Resend error: ${result.error.message}`);
-  }
-  if (!result.data) {
-    throw new Error("Resend returned no data");
-  }
+  if (error) throw new Error(`Resend error: ${error.message}`);
+}
 
-  return { id: result.data.id };
+// Standard lead notification template
+export function leadNotificationHtml(lead: {
+  email: string;
+  company?: string | undefined;
+  state?: string | undefined;
+  wasteType?: string | undefined;
+}) {
+  return `
+    <h2>New lead — Clarent Environmental</h2>
+    <p><strong>Email:</strong> ${lead.email}</p>
+    ${lead.company   ? `<p><strong>Company:</strong> ${lead.company}</p>` : ""}
+    ${lead.state     ? `<p><strong>State:</strong> ${lead.state}</p>` : ""}
+    ${lead.wasteType ? `<p><strong>Waste type:</strong> ${lead.wasteType}</p>` : ""}
+  `;
 }
