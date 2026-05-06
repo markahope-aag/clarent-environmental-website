@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -67,62 +68,54 @@ export function HeroSection() {
           </ul>
         </div>
 
-        <HeroDiamond />
+        <HeroImage />
       </div>
     </section>
   );
 }
 
-function HeroDiamond() {
+// Photo by Atik sulianami on Unsplash — see public/hero-drums.jpg.attribution.md
+function HeroImage() {
   return (
     <div className="relative mx-auto w-full max-w-md lg:max-w-none">
-      <svg
-        viewBox="0 0 480 480"
-        className="h-auto w-full"
-        aria-hidden
-        focusable="false"
+      <div
+        className="overflow-hidden"
+        style={{
+          borderRadius: "var(--radius-xl)",
+          boxShadow: "var(--shadow-elevated)",
+          aspectRatio: "4 / 3",
+        }}
       >
-        <defs>
-          <filter id="hero-diamond-shadow" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="14" stdDeviation="22" floodColor="#1C2B2A" floodOpacity="0.18" />
-          </filter>
-          <linearGradient id="hero-diamond-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#FF7A1F" />
-            <stop offset="100%" stopColor="#C24E00" />
-          </linearGradient>
-        </defs>
+        <Image
+          src="/hero-drums.jpg"
+          alt="Stacked steel drums in an industrial storage yard"
+          width={1600}
+          height={1200}
+          priority
+          fetchPriority="high"
+          sizes="(min-width: 1024px) 45vw, 100vw"
+          className="h-full w-full object-cover"
+        />
+      </div>
 
-        <g transform="rotate(45 240 240)" filter="url(#hero-diamond-shadow)">
-          <rect
-            x="60"
-            y="60"
-            width="360"
-            height="360"
-            rx="20"
-            fill="url(#hero-diamond-gradient)"
-          />
-          <rect
-            x="148"
-            y="148"
-            width="184"
-            height="184"
-            rx="14"
-            fill="var(--color-warm-white)"
-          />
-        </g>
-
-        {/* Inner orange accent square */}
-        <g transform="rotate(45 240 240)">
-          <rect
-            x="200"
-            y="200"
-            width="80"
-            height="80"
-            rx="6"
-            fill="var(--color-orange)"
-          />
-        </g>
-      </svg>
+      {/* Brand accent — diamond mark perched on the corner */}
+      <div
+        className="absolute -bottom-6 -left-6 hidden size-20 rotate-45 items-center justify-center md:flex"
+        style={{
+          backgroundColor: "var(--color-orange)",
+          borderRadius: "var(--radius-md)",
+          boxShadow: "var(--shadow-elevated)",
+        }}
+        aria-hidden
+      >
+        <span
+          className="block size-8"
+          style={{
+            backgroundColor: "var(--color-warm-white)",
+            borderRadius: "var(--radius-sm)",
+          }}
+        />
+      </div>
     </div>
   );
 }

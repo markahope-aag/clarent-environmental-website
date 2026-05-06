@@ -54,3 +54,5 @@ sanity.cli.log
 .vscode/
 .idea/
 .cursor/
+
+.vercel

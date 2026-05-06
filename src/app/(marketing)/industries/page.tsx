@@ -8,11 +8,19 @@ export const metadata: Metadata = {
     "Compliant hazardous waste service for auto shops, dental practices, laboratories, machine shops, dry cleaners, printers, manufacturers, and contractors.",
 };
 
-interface Industry {
+export interface IndustryHeroImage {
+  src: string;
+  alt: string;
+  credit: string;
+  creditUrl: string;
+}
+
+export interface Industry {
   slug: string;
   name: string;
   summary: string;
   wasteTypes: string[];
+  heroImage?: IndustryHeroImage | undefined;
 }
 
 export const INDUSTRIES: Industry[] = [

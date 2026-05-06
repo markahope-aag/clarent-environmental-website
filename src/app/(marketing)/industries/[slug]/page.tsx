@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { INDUSTRIES } from "../page";
+import { INDUSTRIES, type IndustryHeroImage } from "../page";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -21,6 +22,51 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: industry.name,
     description: industry.summary,
   };
+}
+
+function HeroBanner({ image }: { image: IndustryHeroImage }) {
+  return (
+    <section
+      style={{
+        backgroundColor: "var(--color-warm-white)",
+        paddingBottom: "var(--space-section-sm)",
+      }}
+    >
+      <div className="mx-auto max-w-5xl px-6">
+        <figure
+          className="relative overflow-hidden"
+          style={{
+            borderRadius: "var(--radius-xl)",
+            boxShadow: "var(--shadow-elevated)",
+            aspectRatio: "16 / 9",
+          }}
+        >
+          <Image
+            src={image.src}
+            alt={image.alt}
+            fill
+            priority
+            sizes="(min-width: 1024px) 1024px, 100vw"
+            className="object-cover"
+          />
+        </figure>
+        <figcaption
+          className="mt-3 text-right text-xs"
+          style={{ color: "var(--color-forest)", opacity: 0.7 }}
+        >
+          Photo:{" "}
+          <a
+            href={image.creditUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline-offset-2 hover:underline"
+          >
+            {image.credit}
+          </a>
+        </figcaption>
+      </div>
+    </section>
+  );
 }
 
 export default async function IndustryPage({ params }: PageProps) {
@@ -67,6 +113,8 @@ export default async function IndustryPage({ params }: PageProps) {
           </p>
         </div>
       </section>
+
+      {industry.heroImage && <HeroBanner image={industry.heroImage} />}
 
       <section
         className="bg-white"
