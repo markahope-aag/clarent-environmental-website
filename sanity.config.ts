@@ -1,16 +1,16 @@
 import { defineConfig } from "sanity";
-import { structureTool } from "sanity/structure";
 import { visionTool } from "@sanity/vision";
+import { schemaTypes } from "./src/lib/sanity/schemas";
 
-import { sanityConfig } from "@/lib/sanity/config";
-import { schema } from "@/sanity/schema";
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!;
+const dataset   = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
 
 export default defineConfig({
-  name: "default",
-  title: "Clarent Environmental",
+  projectId,
+  dataset,
+  schema: { types: schemaTypes },
+  plugins: [
+    ...(process.env.NODE_ENV === "development" ? [visionTool()] : []),
+  ],
   basePath: "/studio",
-  projectId: sanityConfig.projectId,
-  dataset: sanityConfig.dataset,
-  schema,
-  plugins: [structureTool(), visionTool({ defaultApiVersion: sanityConfig.apiVersion })],
 });
