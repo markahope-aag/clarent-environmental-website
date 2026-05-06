@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens. Brand-specific values (font stacks, palette, motion curves)
+ * will be overwritten when the brand spec is provided. Keep tokens in this
+ * file as the single source of truth — components reference them via Tailwind
+ * utilities or `var(--token-name)`.
+ */
+
+@theme {
+  /* Surface */
+  --color-background: oklch(99% 0 0);
+  --color-foreground: oklch(15% 0.01 250);
+  --color-muted: oklch(96% 0.005 250);
+  --color-muted-foreground: oklch(45% 0.01 250);
+  --color-border: oklch(92% 0.005 250);
+  --color-ring: oklch(70% 0.16 240);
+
+  /* Brand (placeholder until brand spec lands) */
+  --color-primary: oklch(45% 0.16 165);
+  --color-primary-foreground: oklch(99% 0 0);
+  --color-accent: oklch(75% 0.16 90);
+  --color-accent-foreground: oklch(15% 0.01 250);
+
+  /* State */
+  --color-destructive: oklch(58% 0.22 25);
+  --color-destructive-foreground: oklch(99% 0 0);
+
+  /* Typography (placeholder) */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: ui-serif, Georgia, "Times New Roman", serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Fluid type scale */
+  --text-base: clamp(1rem, 0.94rem + 0.3vw, 1.125rem);
+  --text-display: clamp(2.5rem, 1.4rem + 5vw, 6rem);
+
+  /* Spacing rhythm */
+  --space-section: clamp(4rem, 2.5rem + 5vw, 9rem);
+
+  /* Motion */
+  --duration-fast: 150ms;
+  --duration-normal: 280ms;
+  --duration-slow: 600ms;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  /* Radii */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-pill: 9999px;
+}
+
+@media (prefers-color-scheme: dark) {
+  @theme {
+    --color-background: oklch(12% 0.01 250);
+    --color-foreground: oklch(96% 0.005 250);
+    --color-muted: oklch(20% 0.01 250);
+    --color-muted-foreground: oklch(70% 0.01 250);
+    --color-border: oklch(25% 0.01 250);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+html {
+  color-scheme: light dark;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}

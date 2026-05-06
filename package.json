@@ -1,0 +1,59 @@
+{
+  "name": "clarent-environmental-website",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "shoot": "bun --env-file=.env.local scripts/shoot.ts"
+  },
+  "dependencies": {
+    "@hono/node-server": "^2.0.1",
+    "@hubspot/api-client": "^13.5.0",
+    "@sanity/client": "^7.22.0",
+    "@sanity/image-url": "^2.1.1",
+    "@supabase/ssr": "^0.10.2",
+    "@supabase/supabase-js": "^2.105.3",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.38.0",
+    "hono": "^4.12.18",
+    "lucide-react": "^1.14.0",
+    "next": "16.2.5",
+    "next-sanity": "^12.4.3",
+    "radix-ui": "^1.4.3",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "resend": "^6.12.3",
+    "sanity": "^5.24.0",
+    "sharp": "^0.34.5",
+    "tailwind-merge": "^3.5.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@sanity/vision": "^5.24.0",
+    "@tailwindcss/postcss": "^4",
+    "@types/jsdom": "^28.0.1",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.5",
+    "jsdom": "^29.1.1",
+    "playwright": "^1.59.1",
+    "tailwindcss": "^4",
+    "tsx": "^4.21.0",
+    "typescript": "^5"
+  },
+  "ignoreScripts": [
+    "sharp",
+    "unrs-resolver"
+  ],
+  "trustedDependencies": [
+    "sharp",
+    "unrs-resolver"
+  ]
+}
